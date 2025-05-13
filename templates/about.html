@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('home')}}" style="color: red;">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('about')}}">About</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('mic')}}">Speech to Text</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('prediction')}}">Gesture Recoginition</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('sign')}}">Sign Recoginition</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('index')}}">LogOut</a>
+    </li>
+{% endblock %}
+
+
+{% block content %}
+    <section class="about_section layout_padding">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 ml-auto pr-0">
+                    <div class="about_container">
+                        <div class="row">
+                            <center>
+                                <div class="col-10" style="background-color: rgba(0, 0, 0, 0.548); margin-top: -100px;">
+                                    <div class="detail-box">
+                                        <div class="heading_container">
+                                            <h2><br>About</h2>
+                                        </div>
+                                        <p style="text-align: justify;">
+                                            The project "Speech and Sign Language Translation to Text for Enhanced Communication" aims to bridge the communication gap between the deaf and hard-of-hearing individuals and the general public by utilizing artificial intelligence and machine learning techniques. The project leverages the American Sign Language (ASL) dataset and the YOLO v8 model to recognize live sign language gestures performed by the user and convert them into corresponding text, enabling real-time communication. Additionally, the project includes a speech-to-text conversion module that allows users to speak, and the system transcribes their speech into text using speech recognition libraries. The entire system is developed using Flask, offering an efficient and user-friendly platform. By integrating both sign language and speech recognition, this project promotes enhanced communication, fostering inclusivity and accessibility. The combined functionalities of sign language translation and speech-to-text ensure that both visual and auditory communication needs are addressed, making the system suitable for a wide range of applications in real-time communication.
+                                        </p><br>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

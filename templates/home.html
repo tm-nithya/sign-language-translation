@@ -1,0 +1,63 @@
+{% extends 'index.html' %}
+
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('home')}}" style="color: red;">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('about')}}">About</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('mic')}}">Speech to Text</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('prediction')}}">Gesture Recoginition</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('sign')}}">Sign Recoginition</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('index')}}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <script>
+            // Disable the back button functionality by manipulating history
+            if (window.history && window.history.pushState) {
+                window.history.pushState('forward', null, './#forward');
+                window.onpopstate = function() {
+                    window.history.pushState('forward', null, './#forward');
+                    location.replace("{{ url_for('home') }}");  // Force user to stay on home page
+                };
+            }
+        </script>
+    </head>
+    <body>
+        <section class="slider_section position-relative">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="box">
+                                        <div class="detail-box">
+                                            <h1>
+                                                Hands that Speak, Technology that Listens
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+{% endblock %}

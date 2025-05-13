@@ -1,0 +1,67 @@
+{% extends 'index.html' %}
+
+{% block extra_styles %}
+    <style>
+        .contact_section form div {
+            margin-bottom: 15px;
+        }
+        .contact_section input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        .contact_section button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('index')}}">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('register')}}">Register </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('login')}}" style="color: red;">Login</a>
+    </li>
+{% endblock %}
+
+
+{% block content %}
+    <div class="info_section">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6">
+                    <div class="row info_main-row justify-content-center">
+                        <div class="col-12">
+                            <section class="contact_section text-center">
+                                <h2 style="color: white; margin-top: 50px;">
+                                    Login
+                                </h2>
+                                <form action="{{url_for('login')}}" method="post">
+                                    <div>
+                                        <input type="email" name="email" placeholder="Email ID" />
+                                    </div>
+                                    <div>
+                                        <input type="password" name="password" placeholder="Password" />
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button>Submit</button>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

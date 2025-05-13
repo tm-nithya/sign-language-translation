@@ -1,0 +1,145 @@
+{% extends 'index.html' %}
+
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}" style="color: red;">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('mic') }}">Speech to Text</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('prediction') }}">Gesture Recognition</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('sign')}}">Sign Recoginition</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('index') }}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block content %}
+<div class="info_section">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-11 text-center">
+                <section class="contact_section">
+                    <h2 style="color: white; margin-top: 50px;">Speech to Text</h2>
+
+                    <!-- Step 1: Record and Transcribe -->
+                    <h3>Step 1 - Record your voice</h3>
+                    <div id="controls" class="mt-3">
+                        <button id="recordButton" class="btn btn-primary mx-2">Record</button>
+                        <button id="stopButton" class="btn btn-danger mx-2" disabled>Stop</button>
+                        <button id="transcribeButton" class="btn btn-success mx-2" disabled>Transcribe</button>
+                    </div>
+                    <p id="formats" class="mt-2">Format: </p>
+                    <h3>Recorded Audio</h3>
+                    <ol id="recordingsList" class="mt-3"></ol>
+
+                    <!-- Display the transcript -->
+                    {% if transcript1 != "" %}
+                    <div class="mt-4">
+                        <h4>Recognized Text:</h4>
+                        <p style="font-size: 18px; font-weight: bold;">{{ transcript1 }}</p>
+                    </div>
+                    {% endif %}
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- WebAudioRecorder JavaScript -->
+<script src="{{ url_for('static', filename='js/WebAudioRecorder.min.js') }}"></script>
+<script>
+    let recordButton = document.getElementById("recordButton");
+    let stopButton = document.getElementById("stopButton");
+    let transcribeButton = document.getElementById("transcribeButton");
+    let recordingsList = document.getElementById("recordingsList");
+    let formats = document.getElementById("formats");
+
+    let audioContext;
+    let gumStream;
+    let recorder;
+    let input;
+    let audioBlob;
+
+    recordButton.addEventListener("click", startRecording);
+    stopButton.addEventListener("click", stopRecording);
+    transcribeButton.addEventListener("click", transcribeAudio);
+
+    function startRecording() {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+            audioContext = new AudioContext();
+            gumStream = stream;
+            input = audioContext.createMediaStreamSource(stream);
+
+            recorder = new WebAudioRecorder(input, {
+                workerDir: "{{ url_for('static', filename='js/') }}",
+                encoding: "wav",
+                numChannels: 1,
+            });
+
+            recorder.onComplete = function (_, blob) {
+                audioBlob = blob; // Store the audio blob
+                let url = URL.createObjectURL(blob);
+                let li = document.createElement("li");
+                let audio = document.createElement("audio");
+                audio.controls = true;
+                audio.src = url;
+                li.appendChild(audio);
+                recordingsList.appendChild(li);
+                transcribeButton.disabled = false; // Enable transcribe button
+            };
+
+            recorder.startRecording();
+            recordButton.disabled = true;
+            stopButton.disabled = false;
+            formats.innerHTML = "Recording in wav format...";
+        });
+    }
+
+    function stopRecording() {
+        recorder.finishRecording();
+        gumStream.getAudioTracks()[0].stop();
+        recordButton.disabled = false;
+        stopButton.disabled = true;
+        formats.innerHTML = "Recording stopped.";
+    }
+
+    function transcribeAudio() {
+        if (!audioBlob) {
+            alert("No recording found. Please record your voice first.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", audioBlob, "recording.wav");
+
+        fetch("/mic", {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.transcript) {
+                    const transcriptDiv = document.createElement("div");
+                    transcriptDiv.innerHTML = `
+                        <h4>Recognized Text:</h4>
+                        <p style="font-size: 18px; font-weight: bold;">${data.transcript}</p>
+                    `;
+                    recordingsList.appendChild(transcriptDiv);
+                } else {
+                    alert("Failed to transcribe audio.");
+                }
+            })
+            .catch((err) => {
+                console.error("Error during transcription:", err);
+            });
+    }
+</script>
+{% endblock %}

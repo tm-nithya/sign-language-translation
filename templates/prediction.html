@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('home')}}" style="color: red;">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('about')}}">About</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('mic')}}">Speech to Text</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('prediction')}}">Gesture Recognition</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('sign')}}">Sign Recoginition</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('index')}}">LogOut</a>
+    </li>
+{% endblock %}
+
+{% block content %}
+
+<div class="info_section">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-11">
+                <div class="row info_main-row justify-content-center">
+                    <div class="col-12">
+                        <section class="contact_section text-center">
+                            <h2 style="color: white; margin-top: 50px;">Sign Language Prediction</h2>
+
+                            {% if prediction %}
+                                <h3 style="color: green;"><b>Result: {{prediction}}</b></h3>
+                            {% endif %}
+
+                            <form action="{{url_for('open_webcam')}}" method="post">
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary">Start Prediction</button>
+                                </div>
+                            </form>
+
+                            <div class="instruction mt-5">
+                                <h3 style="color: white;">Follow these gestures for sign language recognition:</h3>
+                                <img src="/static/images/signs.jpg" alt="Sign Image" width="800" height="600">
+
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
